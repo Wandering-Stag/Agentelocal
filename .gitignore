@@ -1,0 +1,13 @@
+# Dependencias
+/node_modules
+
+# Código compilado
+/out
+
+# Archivos de caché de VS Code
+.vscode-dev-cache/
+
+# Logs de NPM
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
