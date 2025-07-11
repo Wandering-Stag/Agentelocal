@@ -10,17 +10,18 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:agente-limpio.openPanel",
+        "onCommand:agente-limpio.openChat",
         "onCommand:agente-limpio.explainCode",
         "onCommand:agente-limpio.modifyCode",
-        "onCommand:agente-limpio.proposeAndRefactor"
+        "onCommand:agente-limpio.proposeAndRefactor",
+        "onCommand:agente-limpio.createCode"
     ],
     "main": "./out/extension.js",
     "contributes": {
         "commands": [
             {
-                "command": "agente-limpio.openPanel",
-                "title": "Agente Limpio: Abrir Panel de Chat"
+                "command": "agente-limpio.openChat",
+                "title": "Agente Limpio: Abrir Chat"
             },
             {
                 "command": "agente-limpio.explainCode",
@@ -33,6 +34,10 @@
             {
                 "command": "agente-limpio.proposeAndRefactor",
                 "title": "Agente Limpio: Proponer y refactorizar (avanzado)"
+            },
+            {
+                "command": "agente-limpio.createCode",
+                "title": "Agente Limpio: Crear nuevo código desde cero"
             }
         ],
         "menus": {
