@@ -20,19 +20,13 @@ export function activate(context: vscode.ExtensionContext) {
 		);
 	});
 
-	// --- ¡NUEVO COMANDO! Se activa con el clic derecho ---
+	// --- Comando para EXPLICAR código (solo lectura) ---
 	const explainCodeCommand = vscode.commands.registerCommand('agente-limpio.explainCode', () => {
 		const editor = vscode.window.activeTextEditor;
 		if (editor) {
 			const selection = editor.document.getText(editor.selection);
 			if (selection) {
-				const fullPrompt = `
-					Por favor, explica el siguiente fragmento de código de forma clara y concisa:
-					\`\`\`
-					${selection}
-					\`\`\`
-				`;
-				
+				const fullPrompt = `Por favor, explica el siguiente fragmento de código de forma clara y concisa:\n\`\`\`\n${selection}\n\`\`\``;
 				vscode.window.withProgress({ location: vscode.ProgressLocation.Notification, title: "El Agente está analizando el código..." }, async () => {
 					const agentResponse = await callOllama(fullPrompt);
 					vscode.window.showInformationMessage(`Explicación del Agente: ${agentResponse}`, { modal: true });
@@ -41,7 +35,55 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	context.subscriptions.push(openPanelCommand, explainCodeCommand);
+	// --- ¡NUEVO COMANDO! Para MODIFICAR código (escritura) ---
+	const modifyCodeCommand = vscode.commands.registerCommand('agente-limpio.modifyCode', async () => {
+		const editor = vscode.window.activeTextEditor;
+		if (!editor) {
+			vscode.window.showErrorMessage("No hay un editor de texto activo.");
+			return;
+		}
+
+		const selection = editor.selection;
+		const selectedText = editor.document.getText(selection);
+
+		if (!selectedText) {
+			vscode.window.showWarningMessage("Por favor, selecciona el código que quieres modificar.");
+			return;
+		}
+
+		// Pedimos al usuario que describa la modificación
+		const modificationRequest = await vscode.window.showInputBox({
+			prompt: "¿Qué modificación quieres hacer en el código seleccionado?",
+			placeHolder: "Ej: refactoriza este código para que sea más eficiente, añade comentarios, etc."
+		});
+
+		if (!modificationRequest) {
+			return; // El usuario canceló
+		}
+
+		const fullPrompt = `
+			Tarea: El usuario quiere modificar un fragmento de código.
+			Petición del usuario: "${modificationRequest}"
+			Código original:
+			\`\`\`
+			${selectedText}
+			\`\`\`
+			Por favor, proporciona únicamente el código modificado, sin explicaciones adicionales ni la etiqueta de bloque de código (\`\`\`).
+		`;
+
+		vscode.window.withProgress({ location: vscode.ProgressLocation.Notification, title: "El Agente está modificando el código..." }, async () => {
+			const agentResponse = await callOllama(fullPrompt);
+			
+			// Usamos editor.edit para reemplazar la selección con la respuesta del agente
+			editor.edit(editBuilder => {
+				editBuilder.replace(selection, agentResponse);
+			});
+
+			vscode.window.showInformationMessage("¡El código ha sido modificado!");
+		});
+	});
+
+	context.subscriptions.push(openPanelCommand, explainCodeCommand, modifyCodeCommand);
 }
 
 async function callOllama(prompt: string): Promise<string> {

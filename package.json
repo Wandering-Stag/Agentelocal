@@ -11,7 +11,8 @@
     ],
     "activationEvents": [
         "onCommand:agente-limpio.openPanel",
-        "onCommand:agente-limpio.explainCode"
+        "onCommand:agente-limpio.explainCode",
+        "onCommand:agente-limpio.modifyCode"
     ],
     "main": "./out/extension.js",
     "contributes": {
@@ -23,6 +24,10 @@
             {
                 "command": "agente-limpio.explainCode",
                 "title": "Agente Limpio: Explicar este código"
+            },
+            {
+                "command": "agente-limpio.modifyCode",
+                "title": "Agente Limpio: Pedir modificación de código"
             }
         ],
         "menus": {
@@ -30,7 +35,12 @@
                 {
                     "when": "editorHasSelection",
                     "command": "agente-limpio.explainCode",
-                    "group": "navigation"
+                    "group": "1_modification"
+                },
+                {
+                    "when": "editorHasSelection",
+                    "command": "agente-limpio.modifyCode",
+                    "group": "1_modification"
                 }
             ]
         }
