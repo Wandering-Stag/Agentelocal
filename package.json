@@ -10,16 +10,30 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:agente-limpio.openPanel"
+        "onCommand:agente-limpio.openPanel",
+        "onCommand:agente-limpio.explainCode"
     ],
     "main": "./out/extension.js",
     "contributes": {
         "commands": [
             {
                 "command": "agente-limpio.openPanel",
-                "title": "Agente Limpio: Abrir Panel"
+                "title": "Agente Limpio: Abrir Panel de Chat"
+            },
+            {
+                "command": "agente-limpio.explainCode",
+                "title": "Agente Limpio: Explicar este código"
             }
-        ]
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "when": "editorHasSelection",
+                    "command": "agente-limpio.explainCode",
+                    "group": "navigation"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
