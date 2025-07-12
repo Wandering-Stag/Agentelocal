@@ -14,7 +14,9 @@
         "onCommand:agente-limpio.explainCode",
         "onCommand:agente-limpio.modifyCode",
         "onCommand:agente-limpio.proposeAndRefactor",
-        "onCommand:agente-limpio.createCode"
+        "onCommand:agente-limpio.createCode",
+        "onCommand:agente-limpio.searchProject",
+        "onCommand:agente-limpio.runTerminal"
     ],
     "main": "./out/extension.js",
     "contributes": {
@@ -38,27 +40,16 @@
             {
                 "command": "agente-limpio.createCode",
                 "title": "Agente Limpio: Crear nuevo código desde cero"
+            },
+            {
+                "command": "agente-limpio.searchProject",
+                "title": "Agente Limpio: Buscar en el proyecto..."
+            },
+            {
+                "command": "agente-limpio.runTerminal",
+                "title": "Agente Limpio: Ejecutar comando en terminal..."
             }
-        ],
-        "menus": {
-            "editor/context": [
-                {
-                    "when": "editorHasSelection",
-                    "command": "agente-limpio.explainCode",
-                    "group": "2_ai"
-                },
-                {
-                    "when": "editorHasSelection",
-                    "command": "agente-limpio.modifyCode",
-                    "group": "2_ai"
-                },
-                {
-                    "when": "editorHasSelection",
-                    "command": "agente-limpio.proposeAndRefactor",
-                    "group": "1_ai_power"
-                }
-            ]
-        }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
